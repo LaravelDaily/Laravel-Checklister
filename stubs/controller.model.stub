@@ -1,0 +1,49 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ namespacedModel }};
+use {{ rootNamespace }}Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+
+class {{ class }} extends Controller
+{
+    public function index(): View
+    {
+        ${{ modelVariable }}s = {{ model }}::all();
+
+        return view('{{ modelVariable }}s.index', compact('{{ modelVariable }}s'));
+    }
+
+    public function create(): View
+    {
+        return view('{{ modelVariable }}s.create');
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        return redirect()->route('{{ modelVariable }}s.index');
+    }
+
+    public function show({{ model }} ${{ modelVariable }}): View
+    {
+        return view('{{ modelVariable }}s.show', compact('{{ modelVariable }}'));
+    }
+
+    public function edit({{ model }} ${{ modelVariable }}): View
+    {
+        return view('{{ modelVariable }}s.edit', compact('{{ modelVariable }}'));
+    }
+
+    public function update(Request $request, {{ model }} ${{ modelVariable }}): RedirectResponse
+    {
+        return redirect()->route('{{ modelVariable }}s.index');
+    }
+
+    public function destroy({{ model }} ${{ modelVariable }}): RedirectResponse
+    {
+        return redirect()->route('{{ modelVariable }}s.index');
+    }
+}

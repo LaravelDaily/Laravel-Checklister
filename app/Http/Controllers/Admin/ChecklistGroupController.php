@@ -5,64 +5,36 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreChecklistGroupRequest;
 use App\Models\ChecklistGroup;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ChecklistGroupController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function create(): View
     {
         return view('admin.checklist_groups.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  StoreChecklistGroupRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreChecklistGroupRequest $request)
+    public function store(StoreChecklistGroupRequest $request): RedirectResponse
     {
         ChecklistGroup::create($request->validated());
 
         return redirect()->route('home');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  ChecklistGroup $checklistGroup
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ChecklistGroup $checklistGroup)
+    public function edit(ChecklistGroup $checklistGroup): View
     {
         return view('admin.checklist_groups.edit', compact('checklistGroup'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  StoreChecklistGroupRequest  $request
-     * @param  ChecklistGroup $checklistGroup
-     * @return \Illuminate\Http\Response
-     */
-    public function update(StoreChecklistGroupRequest $request, ChecklistGroup $checklistGroup)
+    public function update(StoreChecklistGroupRequest $request, ChecklistGroup $checklistGroup): RedirectResponse
     {
         $checklistGroup->update($request->validated());
 
         return redirect()->route('home');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  ChecklistGroup $checklistGroup
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ChecklistGroup $checklistGroup)
+    public function destroy(ChecklistGroup $checklistGroup): RedirectResponse
     {
         $checklistGroup->delete();
 
