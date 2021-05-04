@@ -8,6 +8,7 @@ use App\Models\Checklist;
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -46,5 +47,18 @@ class TaskController extends Controller
         return redirect()->route('admin.checklist_groups.checklists.edit', [
             $checklist->checklist_group_id, $checklist
         ]);
+    }
+
+    public function store_image_upload(Request $request)
+    {
+        $model         = new Task();
+        $model->id     = $request->input('task_id', 0);
+        $model->exists = true;
+        $media         = $model->addMediaFromRequest('upload')->toMediaCollection('tasks-media');
+
+        return response()->json([
+            'id' => $media->id,
+            'url' => $media->getUrl()
+        ], 201);
     }
 }

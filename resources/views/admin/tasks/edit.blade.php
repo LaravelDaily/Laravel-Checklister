@@ -18,7 +18,7 @@
 
                         <form
                             action="{{ route('admin.checklists.tasks.update', [$checklist, $task]) }}"
-                            method="POST">
+                            method="POST" id="task-form">
                             @csrf
                             @method('PUT')
                             <div class="card-header">{{ __('Edit Task') }}</div>
@@ -51,8 +51,61 @@
 
 @section('scripts')
     <script>
+        function SimpleUploadAdapter(editor) {
+            editor.plugins.get('FileRepository').createUploadAdapter = function(loader) {
+                return {
+                    upload: function() {
+                        return loader.file
+                            .then(function (file) {
+                                return new Promise(function(resolve, reject) {
+                                    // Init request
+                                    var xhr = new XMLHttpRequest();
+                                    xhr.open('POST', '{{ route('admin.tasks.image_upload') }}', true);
+                                    xhr.setRequestHeader('x-csrf-token', '{{ csrf_token() }}');
+                                    xhr.setRequestHeader('Accept', 'application/json');
+                                    xhr.responseType = 'json';
+
+                                    // Init listeners
+                                    var genericErrorText = `Couldn't upload file: ${ file.name }.`;
+                                    xhr.addEventListener('error', function() { reject(genericErrorText) });
+                                    xhr.addEventListener('abort', function() { reject() });
+                                    xhr.addEventListener('load', function() {
+                                        var response = xhr.response;
+
+                                        if (!response || xhr.status !== 201) {
+                                            return reject(response && response.message ? `${genericErrorText}\n${xhr.status} ${response.message}` : `${genericErrorText}\n ${xhr.status} ${xhr.statusText}`);
+                                        }
+
+                                        document.getElementById("task-form").innerHTML += '<input type="hidden" name="ck-media[]" value="' + response.id + '">';
+
+                                        resolve({ default: response.url });
+                                    });
+
+                                    if (xhr.upload) {
+                                        xhr.upload.addEventListener('progress', function(e) {
+                                            if (e.lengthComputable) {
+                                                loader.uploadTotal = e.total;
+                                                loader.uploaded = e.loaded;
+                                            }
+                                        });
+                                    }
+
+                                    // Send request
+                                    var data = new FormData();
+                                    data.append('upload', file);
+                                    data.append('task_id', '{{ $task->id ?? 0 }}');
+                                    xhr.send(data);
+                                });
+                            })
+                    }
+                };
+            }
+        }
+
         ClassicEditor
-            .create( document.querySelector( '#task-textarea' ) )
+            .create( document.querySelector( '#task-textarea' ), {
+                extraPlugins: [SimpleUploadAdapter]
+            } )
             .catch( error => {
                 console.error( error );
             } );
