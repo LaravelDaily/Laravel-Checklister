@@ -19,9 +19,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('welcome', [\App\Http\Controllers\PageController::class, 'welcome'])->name('welcome');
+    Route::get('consultation', [\App\Http\Controllers\PageController::class, 'consultation'])->name('consultation');
+
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'is_admin'], function () {
         Route::resource('pages', \App\Http\Controllers\Admin\PageController::class)
             ->only(['edit', 'update']);
