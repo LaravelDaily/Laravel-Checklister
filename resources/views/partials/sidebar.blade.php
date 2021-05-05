@@ -40,21 +40,17 @@
                     </a>
                 </li>
             @endforeach
-        @endif
 
-        <li class="c-sidebar-nav-title">{{ __('Other') }}</li>
-        <li class="c-sidebar-nav-item">
-            <a class="c-sidebar-nav-link" href="{{ route('logout') }}"
-               onclick="event.preventDefault();
-                         document.getElementById('logout-form').submit();">
-                <svg class="c-sidebar-nav-icon">
-                    <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-speedometer') }}"></use>
-                </svg> {{ __('Logout') }}
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
-        </li>
+            <li class="c-sidebar-nav-title">{{ __('Manage Data') }}</li>
+            <li class="c-sidebar-nav-item c-sidebar-nav-dropdown">
+                <a class="c-sidebar-nav-link"
+                   href="{{ route('admin.users.index') }}">
+                    <svg class="c-sidebar-nav-icon">
+                        <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-puzzle') }}"></use>
+                    </svg> {{ __('Users') }}
+                </a>
+            </li>
+        @endif
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
 </div>
