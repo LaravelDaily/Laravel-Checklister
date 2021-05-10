@@ -12,20 +12,22 @@
                     </a>
                     <ul class="c-sidebar-nav-dropdown-items">
                         @foreach ($group->checklists as $checklist)
-                        <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" style="padding: .5rem .5rem .5rem 76px"
-                               href="{{ route('admin.checklist_groups.checklists.edit', [$group, $checklist]) }}">
-                                <svg class="c-sidebar-nav-icon">
-                                    <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-list') }}"></use>
-                                </svg>
-                                {{ $checklist->name }}</a>
-                        </li>
+                            <li class="c-sidebar-nav-item">
+                                <a class="c-sidebar-nav-link" style="padding: .5rem .5rem .5rem 76px"
+                                   href="{{ route('admin.checklist_groups.checklists.edit', [$group, $checklist]) }}">
+                                    <svg class="c-sidebar-nav-icon">
+                                        <use
+                                            xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-list') }}"></use>
+                                    </svg>
+                                    {{ $checklist->name }}</a>
+                            </li>
                         @endforeach
                         <li class="c-sidebar-nav-item">
                             <a class="c-sidebar-nav-link"
                                href="{{ route('admin.checklist_groups.checklists.create', $group) }}">
                                 <svg class="c-sidebar-nav-icon">
-                                    <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-note-add') }}"></use>
+                                    <use
+                                        xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-note-add') }}"></use>
                                 </svg>
                                 {{ __('New checklist') }}</a>
                         </li>
@@ -62,20 +64,33 @@
                 </a>
             </li>
         @else
-            @foreach (\App\Models\ChecklistGroup::with(['checklists' => function($query) { $query->whereNull('user_id'); }])->get() as $group)
-                <li class="c-sidebar-nav-title">{{ $group->name }}</li>
-                @foreach ($group->checklists as $checklist)
+            @foreach ($user_menu as $group)
+                <li class="c-sidebar-nav-title">{{ $group['name'] }}
+                    @if ($group['is_new'])
+                        <span class="badge badge-info">NEW</span>
+                    @elseif ($group['is_updated'])
+                        <span class="badge badge-info">UPD</span>
+                    @endif
+                </li>
+                @foreach ($group['checklists'] as $checklist)
                     <li class="c-sidebar-nav-item">
                         <a class="c-sidebar-nav-link"
-                           href="{{ route('user.checklists.show', [$checklist]) }}">
+                           href="{{ route('user.checklists.show', [$checklist['id']]) }}">
                             <svg class="c-sidebar-nav-icon">
                                 <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-list') }}"></use>
                             </svg>
-                            {{ $checklist->name }}</a>
+                            {{ $checklist['name'] }}
+                            @if ($checklist['is_new'])
+                                <span class="badge badge-info">NEW</span>
+                            @elseif ($checklist['is_updated'])
+                                <span class="badge badge-info">UPD</span>
+                            @endif
+                        </a>
                     </li>
                 @endforeach
             @endforeach
         @endif
     </ul>
-    <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
+    <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent"
+            data-class="c-sidebar-minimized"></button>
 </div>

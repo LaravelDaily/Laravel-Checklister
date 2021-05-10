@@ -20,7 +20,7 @@ class ChecklistController extends Controller
     {
         $checklistGroup->checklists()->create($request->validated());
 
-        return redirect()->route('home');
+        return redirect()->route('welcome');
     }
 
     public function edit(ChecklistGroup $checklistGroup, Checklist $checklist): View
@@ -32,13 +32,13 @@ class ChecklistController extends Controller
     {
         $checklist->update($request->validated());
 
-        return redirect()->route('home');
+        return redirect()->route('welcome');
     }
 
     public function destroy(ChecklistGroup $checklistGroup, Checklist $checklist): RedirectResponse
     {
         $checklist->delete();
 
-        return redirect()->route('home');
+        return redirect()->route('welcome');
     }
 }
