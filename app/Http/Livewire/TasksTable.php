@@ -18,8 +18,13 @@ class TasksTable extends Component
 
     public function updateTaskOrder($tasks)
     {
-        foreach ($tasks as $task) {
-            Task::find($task['value'])->update(['position' => $task['order']]);
-        }
+        $tasks = array_map(function ($task) {
+            return [
+                'position' => $task['order'],
+                'id'       => $task['value']
+            ];
+        }, $tasks);
+
+        batch()->update((new Task), $tasks, 'id');
     }
 }
