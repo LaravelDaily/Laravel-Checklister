@@ -26,7 +26,7 @@ class AddPositionToTasksTable extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            //
+            $table->dropColumn('position');
         });
     }
 }
