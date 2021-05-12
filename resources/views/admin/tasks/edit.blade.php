@@ -50,11 +50,6 @@
 @endsection
 
 @section('scripts')
-    <script>
-        ClassicEditor
-            .create( document.querySelector( '#task-textarea' ) )
-            .catch( error => {
-                console.error( error );
-            } );
-    </script>
+    @include('admin.ckeditor')
 @endsection
+
