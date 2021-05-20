@@ -159,7 +159,6 @@ class AdminChecklistsTest extends TestCase
         $task1 = Task::factory()->create(['checklist_id' => $checklist->id, 'position' => 1]);
         $task2 = Task::factory()->create(['checklist_id' => $checklist->id, 'position' => 2]);
 
-
         Livewire::test(TasksTable::class, ['checklist' => $checklist])
             ->call('task_up', $task2->id);
 
