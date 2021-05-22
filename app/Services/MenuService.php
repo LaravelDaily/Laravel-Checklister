@@ -29,7 +29,6 @@ class MenuService
         foreach ($menu->toArray() as $group) {
             if (count($group['checklists']) > 0) {
                 $group_updated_at = $user_checklists->where('checklist_group_id', $group['id'])->max('updated_at');
-                info($group['updated_at'] . ' - ' . $group_updated_at);
                 $group['is_new'] = $group_updated_at && Carbon::create($group['created_at'])->greaterThan($group_updated_at);
                 $group['is_updated'] = !($group['is_new'])
                     && $group_updated_at
