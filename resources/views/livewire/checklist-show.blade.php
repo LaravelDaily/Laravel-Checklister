@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-8">
         <div class="card">
             <div class="card-header">
                 {{ $checklist->name }}
@@ -39,5 +39,46 @@
                 </table>
             </div>
         </div>
+    </div>
+    <div class="col-md-4">
+        @if (!is_null($current_task))
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-right">
+                        <a href="#">&star;</a>
+                    </div>
+                    <b>{{ $current_task->name }}</b>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    &#9788;
+                    &nbsp;
+                    @if ($current_task->added_to_my_day_at)
+                        <a wire:click.prevent="add_to_my_day({{ $current_task->id }})" href="#">{{ __('Remove from My Day') }}</a>
+                    @else
+                        <a wire:click.prevent="add_to_my_day({{ $current_task->id }})" href="#">{{ __('Add to My Day') }}</a>
+                    @endif
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    &#9993;
+                    &nbsp;
+                    <a href="#">{{ __('Remind me') }}</a>
+                    <hr />
+                    &#9745;
+                    &nbsp;
+                    <a href="#">{{ __('Add Due Date') }}</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    &#9998;
+                    &nbsp;
+                    <a href="#">{{ __('Note') }}</a>
+                </div>
+            </div>
+        @endif
     </div>
 </div>

@@ -20,7 +20,8 @@ class Task extends Model implements HasMedia
         'position',
         'user_id',
         'task_id',
-        'completed_at'
+        'completed_at',
+        'added_to_my_day_at',
     ];
 
     public function registerMediaConversions(Media $media = null): void

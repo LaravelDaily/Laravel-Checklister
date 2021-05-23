@@ -64,6 +64,22 @@
                 </a>
             </li>
         @else
+            @foreach ($user_tasks_menu as $key => $user_task_menu)
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link"
+                   href="#">
+                    <svg class="c-sidebar-nav-icon">
+                        <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-' . $user_task_menu['icon']) }}"></use>
+                    </svg>
+                    {{ $user_task_menu['name'] }}
+                    @livewire('user-tasks-counter', [
+                        'task_type' => $key,
+                        'tasks_count' => $user_task_menu['tasks_count'],
+                    ])
+                </a>
+            </li>
+            @endforeach
+
             @foreach ($user_menu as $group)
                 <li class="c-sidebar-nav-title">{{ $group['name'] }}
                     @if ($group['is_new'])
@@ -81,7 +97,7 @@
                             </svg>
                             {{ $checklist['name'] }}
                             @livewire('completed-tasks-counter', [
-                                'completed_tasks' => count($checklist['user_tasks']),
+                                'completed_tasks' => count($checklist['user_completed_tasks']),
                                 'tasks_count' => count($checklist['tasks']),
                                 'checklist_id' => $checklist['id']
                             ])
