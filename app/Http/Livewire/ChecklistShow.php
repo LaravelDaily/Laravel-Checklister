@@ -11,6 +11,8 @@ class ChecklistShow extends Component
     public $opened_tasks = [];
     public $completed_tasks = [];
     public ?Task $current_task;
+    public $due_date_opened = FALSE;
+    public $due_date;
 
     public function mount()
     {
@@ -127,5 +129,43 @@ class ChecklistShow extends Component
             $this->emit('user_tasks_counter_change', 'important');
         }
         $this->current_task = $user_task;
+    }
+
+    public function toggle_due_date()
+    {
+        $this->due_date_opened = !$this->due_date_opened;
+    }
+
+    public function set_due_date($task_id, $due_date = NULL)
+    {
+        $user_task = Task::where('user_id', auth()->id())
+            ->where(function ($query) use ($task_id) {
+                $query->where('id', $task_id)
+                    ->orWhere('task_id', $task_id);
+            })
+            ->first();
+        if ($user_task) {
+            if (is_null($due_date)) {
+                $user_task->update(['due_date' => NULL]);
+                $this->emit('user_tasks_counter_change', 'planned', -1);
+            } else {
+                $user_task->update(['due_date' => $due_date]);
+                $this->emit('user_tasks_counter_change', 'planned');
+            }
+        } else {
+            $task = Task::find($task_id);
+            $user_task = $task->replicate();
+            $user_task['user_id'] = auth()->id();
+            $user_task['task_id'] = $task_id;
+            $user_task['due_date'] = $due_date;
+            $user_task->save();
+            $this->emit('user_tasks_counter_change', 'planned');
+        }
+        $this->current_task = $user_task;
+    }
+
+    public function updatedDueDate($value)
+    {
+        $this->set_due_date($this->current_task->id, $value);
     }
 }

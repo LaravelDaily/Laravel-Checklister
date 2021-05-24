@@ -10,7 +10,7 @@
                         <tr>
                             <td width="5%">
                                 <input type="checkbox" wire:click="complete_task({{ $task->id }})"
-                                    @if (in_array($task->id, $completed_tasks)) checked="checked" @endif />
+                                       @if (in_array($task->id, $completed_tasks)) checked="checked" @endif />
                             </td>
                             <td width="90%">
                                 <a wire:click.prevent="toggle_task({{$task->id }})" href="#">{{ $task->name }}</a>
@@ -53,9 +53,11 @@
                     &#9788;
                     &nbsp;
                     @if ($current_task->added_to_my_day_at)
-                        <a wire:click.prevent="add_to_my_day({{ $current_task->id }})" href="#">{{ __('Remove from My Day') }}</a>
+                        <a wire:click.prevent="add_to_my_day({{ $current_task->id }})"
+                           href="#">{{ __('Remove from My Day') }}</a>
                     @else
-                        <a wire:click.prevent="add_to_my_day({{ $current_task->id }})" href="#">{{ __('Add to My Day') }}</a>
+                        <a wire:click.prevent="add_to_my_day({{ $current_task->id }})"
+                           href="#">{{ __('Add to My Day') }}</a>
                     @endif
                 </div>
             </div>
@@ -64,10 +66,37 @@
                     &#9993;
                     &nbsp;
                     <a href="#">{{ __('Remind me') }}</a>
-                    <hr />
+                    <hr/>
                     &#9745;
                     &nbsp;
-                    <a href="#">{{ __('Add Due Date') }}</a>
+                    @if ($current_task->due_date)
+                        Due {{ $current_task->due_date->format('M j, Y') }}
+                        &nbsp;&nbsp;
+                        <a wire:click.prevent="set_due_date({{ $current_task->id }})" href="#">{{ __('Remove') }}</a>
+                    @else
+                        <a wire:click.prevent="toggle_due_date" href="#">{{ __('Add Due Date') }}</a>
+                        @if ($due_date_opened)
+                            <ul>
+                                <li>
+                                    <a wire:click.prevent="set_due_date({{ $current_task->id }}, '{{ today()->toDateString() }}')"
+                                       href="#">{{ __('Today') }}</a>
+                                </li>
+                                <li>
+                                    <a wire:click.prevent="set_due_date({{ $current_task->id }}, '{{ today()->addDay()->toDateString() }}')"
+                                       href="#">{{ __('Tomorrow') }}</a>
+                                </li>
+                                <li>
+                                    <a wire:click.prevent="set_due_date({{ $current_task->id }}, '{{ today()->addWeek()->startOfWeek()->toDateString() }}')"
+                                       href="#">{{ __('Next week') }}</a>
+                                </li>
+                                <li>
+                                    {{ __('Or pick a date') }}
+                                    <br />
+                                    <input wire:model="due_date" type="date" name="picker_date" />
+                                </li>
+                            </ul>
+                        @endif
+                    @endif
                 </div>
             </div>
             <div class="card">
