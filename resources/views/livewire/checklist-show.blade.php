@@ -8,31 +8,25 @@
                 <table class="table">
                     @foreach($checklist->tasks->where('user_id', NULL) as $task)
                         <tr>
-                            <td>
+                            <td width="5%">
                                 <input type="checkbox" wire:click="complete_task({{ $task->id }})"
                                     @if (in_array($task->id, $completed_tasks)) checked="checked" @endif />
                             </td>
-                            <td>
+                            <td width="90%">
                                 <a wire:click.prevent="toggle_task({{$task->id }})" href="#">{{ $task->name }}</a>
                             </td>
-                            <td wire:click="toggle_task({{$task->id }})">
-                                @if (in_array($task->id, $opened_tasks))
-                                    <svg class="c-sidebar-nav-icon">
-                                        <use
-                                            xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-caret-top') }}"></use>
-                                    </svg>
+                            <td width="5%">
+                                @if (optional($checklist->user_tasks()->where('task_id', $task->id)->first())->is_important)
+                                    <a wire:click.prevent="mark_as_important({{ $task->id }})" href="#">&starf;</a>
                                 @else
-                                    <svg class="c-sidebar-nav-icon">
-                                        <use
-                                            xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-caret-bottom') }}"></use>
-                                    </svg>
+                                    <a wire:click.prevent="mark_as_important({{ $task->id }})" href="#">&star;</a>
                                 @endif
                             </td>
                         </tr>
                         @if (in_array($task->id, $opened_tasks))
                             <tr>
                                 <td></td>
-                                <td colspan="2">{!! $task->description !!}</td>
+                                <td colspan="3">{!! $task->description !!}</td>
                             </tr>
                         @endif
                     @endforeach
@@ -45,7 +39,11 @@
             <div class="card">
                 <div class="card-body">
                     <div class="float-right">
-                        <a href="#">&star;</a>
+                        @if ($current_task->is_important)
+                            <a wire:click.prevent="mark_as_important({{ $current_task->id }})" href="#">&starf;</a>
+                        @else
+                            <a wire:click.prevent="mark_as_important({{ $current_task->id }})" href="#">&star;</a>
+                        @endif
                     </div>
                     <b>{{ $current_task->name }}</b>
                 </div>
