@@ -15,10 +15,12 @@ class ChecklistShow extends Component
 
     public $opened_tasks = [];
     public $completed_tasks = [];
-
     public ?Task $current_task;
+
     public $due_date_opened = FALSE;
     public $due_date;
+    public $note_opened = FALSE;
+    public $note;
 
     public function mount()
     {
@@ -192,4 +194,17 @@ class ChecklistShow extends Component
     {
         $this->set_due_date($this->current_task->id, $value);
     }
+
+    public function toggle_note()
+    {
+        $this->note_opened = !$this->note_opened;
+        $this->note = $this->current_task->note;
+    }
+
+    public function save_note()
+    {
+        $this->current_task->update(['note' => $this->note]);
+        $this->note_opened = FALSE;
+    }
+
 }

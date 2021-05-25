@@ -6,40 +6,40 @@
             </div>
             <div class="card-body">
                 @if ($list_tasks->count())
-                <table class="table">
-                    @foreach($list_tasks as $task)
-                        <tr>
-                            <td width="5%">
-                                <input type="checkbox" wire:click="complete_task({{ $task->id }})"
-                                       @if (in_array($task->id, $completed_tasks)) checked="checked" @endif />
-                            </td>
-                            <td width="90%">
-                                <a wire:click.prevent="toggle_task({{$task->id }})" href="#">{{ $task->name }}</a>
-                                @if (!is_null($list_type))
-                                    <div style="font-style: italic; font-size: 11px">
-                                        {{ $task->checklist->name }}
-                                        @if (optional($user_tasks->where('task_id', $task->id)->first())->due_date)
-                                            | {{ __('Due') }} {{ $user_tasks->where('task_id', $task->id)->first()->due_date->format('M d, Y') }}
-                                        @endif
-                                    </div>
-                                @endif
-                            </td>
-                            <td width="5%">
-                                @if (optional($user_tasks->where('task_id', $task->id)->first())->is_important)
-                                    <a wire:click.prevent="mark_as_important({{ $task->id }})" href="#">&starf;</a>
-                                @else
-                                    <a wire:click.prevent="mark_as_important({{ $task->id }})" href="#">&star;</a>
-                                @endif
-                            </td>
-                        </tr>
-                        @if (in_array($task->id, $opened_tasks))
+                    <table class="table">
+                        @foreach($list_tasks as $task)
                             <tr>
-                                <td></td>
-                                <td colspan="3">{!! $task->description !!}</td>
+                                <td width="5%">
+                                    <input type="checkbox" wire:click="complete_task({{ $task->id }})"
+                                           @if (in_array($task->id, $completed_tasks)) checked="checked" @endif />
+                                </td>
+                                <td width="90%">
+                                    <a wire:click.prevent="toggle_task({{$task->id }})" href="#">{{ $task->name }}</a>
+                                    @if (!is_null($list_type))
+                                        <div style="font-style: italic; font-size: 11px">
+                                            {{ $task->checklist->name }}
+                                            @if (optional($user_tasks->where('task_id', $task->id)->first())->due_date)
+                                                | {{ __('Due') }} {{ $user_tasks->where('task_id', $task->id)->first()->due_date->format('M d, Y') }}
+                                            @endif
+                                        </div>
+                                    @endif
+                                </td>
+                                <td width="5%">
+                                    @if (optional($user_tasks->where('task_id', $task->id)->first())->is_important)
+                                        <a wire:click.prevent="mark_as_important({{ $task->id }})" href="#">&starf;</a>
+                                    @else
+                                        <a wire:click.prevent="mark_as_important({{ $task->id }})" href="#">&star;</a>
+                                    @endif
+                                </td>
                             </tr>
-                        @endif
-                    @endforeach
-                </table>
+                            @if (in_array($task->id, $opened_tasks))
+                                <tr>
+                                    <td></td>
+                                    <td colspan="3">{!! $task->description !!}</td>
+                                </tr>
+                            @endif
+                        @endforeach
+                    </table>
                 @else
                     {{ __('No tasks found') }}
                 @endif
@@ -103,8 +103,8 @@
                                 </li>
                                 <li>
                                     {{ __('Or pick a date') }}
-                                    <br />
-                                    <input wire:model="due_date" type="date" name="picker_date" />
+                                    <br/>
+                                    <input wire:model="due_date" type="date"/>
                                 </li>
                             </ul>
                         @endif
@@ -115,7 +115,24 @@
                 <div class="card-body">
                     &#9998;
                     &nbsp;
-                    <a href="#">{{ __('Note') }}</a>
+                    @if ($current_task->note)
+                        <a wire:click.prevent="toggle_note" href="#">{{ __('Note') }}</a>
+                        @if (!$note_opened)
+                        <p>
+                            {{ $current_task->note }}
+                            <br />
+                            <a wire:click.prevent="toggle_note" href="#">{{ __('Edit') }}</a>
+                        </p>
+                        @endif
+                    @else
+                        <a wire:click.prevent="toggle_note" href="#">{{ __('Note') }}</a>
+                    @endif
+                    @if ($note_opened)
+                        <div class="mt-4">
+                            <textarea wire:model="note" class="form-control" rows="5"></textarea>
+                            <button wire:click="save_note" class="btn btn-sm btn-primary mt-2">{{ __('Save Note') }}</button>
+                        </div>
+                    @endif
                 </div>
             </div>
         @endif

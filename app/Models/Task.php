@@ -24,6 +24,7 @@ class Task extends Model implements HasMedia
         'added_to_my_day_at',
         'is_important',
         'due_date',
+        'note',
     ];
 
     protected $dates = [
