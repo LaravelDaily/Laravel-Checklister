@@ -22,6 +22,8 @@ Route::group(['middleware' => ['auth', 'save_last_action_timestamp']], function 
     Route::get('consultation', [\App\Http\Controllers\PageController::class, 'consultation'])->name('consultation');
     Route::get('checklists/{checklist}', [\App\Http\Controllers\User\ChecklistController::class, 'show'])
         ->name('user.checklists.show');
+    Route::get('tasklist/{list_type}', [\App\Http\Controllers\User\ChecklistController::class, 'tasklist'])
+        ->name('user.tasklist');
 
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'is_admin'], function () {
         Route::resource('pages', \App\Http\Controllers\Admin\PageController::class)

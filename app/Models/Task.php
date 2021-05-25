@@ -35,4 +35,9 @@ class Task extends Model implements HasMedia
         $this->addMediaConversion('thumb')
             ->width(600);
     }
+
+    public function checklist()
+    {
+        return $this->belongsTo(Checklist::class);
+    }
 }
