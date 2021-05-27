@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Task;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class ChecklistShow extends Component
@@ -21,10 +22,15 @@ class ChecklistShow extends Component
     public $due_date;
     public $note_opened = FALSE;
     public $note;
+    public $reminder_opened = FALSE;
+    public $reminder_date;
+    public $reminder_hour;
 
     public function mount()
     {
         $this->current_task = NULL;
+        $this->reminder_date = now()->addDay()->toDateString();
+        $this->reminder_hour = now()->hour;
     }
 
     public function render()
@@ -205,6 +211,45 @@ class ChecklistShow extends Component
     {
         $this->current_task->update(['note' => $this->note]);
         $this->note_opened = FALSE;
+    }
+
+    public function toggle_reminder()
+    {
+        $this->reminder_opened = !$this->reminder_opened;
+    }
+
+    public function set_reminder($task_id, $reminder_date = NULL)
+    {
+        $user_task = Task::where('user_id', auth()->id())
+            ->where('id', $task_id)
+            ->first();
+
+        $reminder_at = NULL;
+        if ($reminder_date == 'custom') {
+            $reminder_at = Carbon::create($this->reminder_date)
+                ->setHour($this->reminder_hour)
+                ->setMinute(0)
+                ->setSecond(0)
+                ->toDateTimeString();
+        } else if (!is_null($reminder_date)) {
+            $reminder_at = Carbon::create($reminder_date)
+                ->setHour(now()->hour)
+                ->setMinute(0)
+                ->setSecond(0)
+                ->toDateTimeString();
+        }
+
+        if ($user_task) {
+            $user_task->update(['reminder_at' => $reminder_at]);
+        } else {
+            $task = Task::find($task_id);
+            $user_task = $task->replicate();
+            $user_task['user_id'] = auth()->id();
+            $user_task['task_id'] = $task_id;
+            $user_task['reminder_at'] = $reminder_at;
+            $user_task->save();
+        }
+        $this->current_task = $user_task;
     }
 
 }

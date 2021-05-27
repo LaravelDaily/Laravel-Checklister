@@ -77,7 +77,43 @@
                 <div class="card-body">
                     &#9993;
                     &nbsp;
-                    <a href="#">{{ __('Remind me') }}</a>
+                    @if ($current_task->reminder_at)
+                        {{ __('Reminder to be sent at') }} {{ $current_task->reminder_at->format('M j, Y H:i') }}
+                        &nbsp;&nbsp;
+                        <a wire:click.prevent="set_reminder({{ $current_task->id }})" href="#">{{ __('Remove') }}</a>
+                    @else
+                        <a wire:click.prevent="toggle_reminder" href="#">{{ __('Remind me') }}</a>
+                        @if ($reminder_opened)
+                            <ul>
+                                <li>
+                                    <a wire:click.prevent="set_reminder({{ $current_task->id }}, '{{ today()->addDay()->toDateString() }}')"
+                                       href="#">{{ __('Tomorrow') }} {{ date('H') }}:00</a>
+                                </li>
+                                <li>
+                                    <a wire:click.prevent="set_reminder({{ $current_task->id }}, '{{ today()->addWeek()->startOfWeek()->toDateString() }}')"
+                                       href="#">{{ __('Next Monday') }} {{ date('H') }}:00</a>
+                                </li>
+                                <li>
+                                    {{ __('Or pick a date & time') }}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input wire:model="reminder_date" class="form-control" type="date" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select wire:model="reminder_hour" class="form-control">
+                                                @foreach (range(0,23) as $hour)
+                                                    <option value="{{ $hour }}">{{ $hour }}:00</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button wire:click.prevent="set_reminder({{ $current_task->id }}, 'custom')" class="btn btn-primary">{{ __('Save') }}</button>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        @endif
+                    @endif
                     <hr/>
                     &#9745;
                     &nbsp;
