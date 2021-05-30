@@ -8,35 +8,47 @@
                 @if ($list_tasks->count())
                     <table class="table">
                         @foreach($list_tasks as $task)
-                            <tr>
-                                <td width="5%">
-                                    <input type="checkbox" wire:click="complete_task({{ $task->id }})"
-                                           @if (in_array($task->id, $completed_tasks)) checked="checked" @endif />
-                                </td>
-                                <td width="90%">
-                                    <a wire:click.prevent="toggle_task({{$task->id }})" href="#">{{ $task->name }}</a>
-                                    @if (!is_null($list_type))
-                                        <div style="font-style: italic; font-size: 11px">
-                                            {{ $task->checklist->name }}
-                                            @if (optional($user_tasks->where('task_id', $task->id)->first())->due_date)
-                                                | {{ __('Due') }} {{ $user_tasks->where('task_id', $task->id)->first()->due_date->format('M d, Y') }}
-                                            @endif
-                                        </div>
-                                    @endif
-                                </td>
-                                <td width="5%">
-                                    @if (optional($user_tasks->where('task_id', $task->id)->first())->is_important)
-                                        <a wire:click.prevent="mark_as_important({{ $task->id }})" href="#">&starf;</a>
-                                    @else
-                                        <a wire:click.prevent="mark_as_important({{ $task->id }})" href="#">&star;</a>
-                                    @endif
-                                </td>
-                            </tr>
-                            @if (in_array($task->id, $opened_tasks))
+                            @if ($loop->iteration == 6 && !Auth::user()->subscribed())
                                 <tr>
-                                    <td></td>
-                                    <td colspan="3">{!! $task->description !!}</td>
+                                    <td colspan="4" class="text-center">
+                                        <h3>{{ __('You are limited at 5 tasks per checklist') }}</h3>
+                                        <a href="/billing" class="btn btn-primary">{{ __('Unlock all now') }}</a>
+                                    </td>
                                 </tr>
+                            @elseif ($loop->iteration <= 5 || Auth::user()->subscribed())
+                                <tr>
+                                    <td width="5%">
+                                        <input type="checkbox" wire:click="complete_task({{ $task->id }})"
+                                               @if (in_array($task->id, $completed_tasks)) checked="checked" @endif />
+                                    </td>
+                                    <td width="90%">
+                                        <a wire:click.prevent="toggle_task({{$task->id }})"
+                                           href="#">{{ $task->name }}</a>
+                                        @if (!is_null($list_type))
+                                            <div style="font-style: italic; font-size: 11px">
+                                                {{ $task->checklist->name }}
+                                                @if (optional($user_tasks->where('task_id', $task->id)->first())->due_date)
+                                                    | {{ __('Due') }} {{ $user_tasks->where('task_id', $task->id)->first()->due_date->format('M d, Y') }}
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td width="5%">
+                                        @if (optional($user_tasks->where('task_id', $task->id)->first())->is_important)
+                                            <a wire:click.prevent="mark_as_important({{ $task->id }})"
+                                               href="#">&starf;</a>
+                                        @else
+                                            <a wire:click.prevent="mark_as_important({{ $task->id }})"
+                                               href="#">&star;</a>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @if (in_array($task->id, $opened_tasks))
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="3">{!! $task->description !!}</td>
+                                    </tr>
+                                @endif
                             @endif
                         @endforeach
                     </table>
@@ -97,7 +109,7 @@
                                     {{ __('Or pick a date & time') }}
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input wire:model="reminder_date" class="form-control" type="date" />
+                                            <input wire:model="reminder_date" class="form-control" type="date"/>
                                         </div>
                                         <div class="col-md-3">
                                             <select wire:model="reminder_hour" class="form-control">
@@ -107,7 +119,8 @@
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <button wire:click.prevent="set_reminder({{ $current_task->id }}, 'custom')" class="btn btn-primary">{{ __('Save') }}</button>
+                                            <button wire:click.prevent="set_reminder({{ $current_task->id }}, 'custom')"
+                                                    class="btn btn-primary">{{ __('Save') }}</button>
                                         </div>
                                     </div>
                                 </li>
@@ -154,11 +167,11 @@
                     @if ($current_task->note)
                         <a wire:click.prevent="toggle_note" href="#">{{ __('Note') }}</a>
                         @if (!$note_opened)
-                        <p>
-                            {{ $current_task->note }}
-                            <br />
-                            <a wire:click.prevent="toggle_note" href="#">{{ __('Edit') }}</a>
-                        </p>
+                            <p>
+                                {{ $current_task->note }}
+                                <br/>
+                                <a wire:click.prevent="toggle_note" href="#">{{ __('Edit') }}</a>
+                            </p>
                         @endif
                     @else
                         <a wire:click.prevent="toggle_note" href="#">{{ __('Note') }}</a>
@@ -166,7 +179,8 @@
                     @if ($note_opened)
                         <div class="mt-4">
                             <textarea wire:model="note" class="form-control" rows="5"></textarea>
-                            <button wire:click="save_note" class="btn btn-sm btn-primary mt-2">{{ __('Save Note') }}</button>
+                            <button wire:click="save_note"
+                                    class="btn btn-sm btn-primary mt-2">{{ __('Save Note') }}</button>
                         </div>
                     @endif
                 </div>
