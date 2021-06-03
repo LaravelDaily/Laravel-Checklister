@@ -24,6 +24,7 @@ class User extends Authenticatable
         'is_admin',
         'website',
         'last_action_at',
+        'has_free_access',
     ];
 
     /**

@@ -24,7 +24,31 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->website }}</td>
-                                        <td>{{ $user->subscribed('default') ? 'Paid Plan' : '-' }}</td>
+                                        <td>
+                                            @if ($user->has_free_access)
+                                                {{ __('Free Access') }}
+                                                <form action="{{ route('admin.users.toggle_free_access', $user) }}"
+                                                      method="POST"
+                                                      style="display: inline-block; margin-left: 10px">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        {{ __('Remove Free Access') }}
+                                                    </button>
+                                                </form>
+                                            @elseif ($user->subscribed())
+                                                {{ __('Paid Plan') }}
+                                            @else
+                                                ---
+                                                <form action="{{ route('admin.users.toggle_free_access', $user) }}"
+                                                      method="POST"
+                                                      style="display: inline-block; margin-left: 10px">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-info">
+                                                        {{ __('Give Free Access') }}
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>

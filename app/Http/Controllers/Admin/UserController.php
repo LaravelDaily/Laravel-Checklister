@@ -14,4 +14,11 @@ class UserController extends Controller
 
         return view('admin.users.index', compact('users'));
     }
+
+    public function toggle_free_access(User $user)
+    {
+        $user->update(['has_free_access' => ((int)$user->has_free_access + 1) % 2]);
+
+        return redirect()->route('admin.users.index')->with('message', __('Operation successful.'));
+    }
 }

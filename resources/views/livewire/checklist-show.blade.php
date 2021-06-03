@@ -8,14 +8,14 @@
                 @if ($list_tasks->count())
                     <table class="table">
                         @foreach($list_tasks as $task)
-                            @if ($loop->iteration == 6 && !Auth::user()->subscribed())
+                            @if ($loop->iteration == 6 && !Auth::user()->has_free_access && !Auth::user()->subscribed())
                                 <tr>
                                     <td colspan="4" class="text-center">
                                         <h3>{{ __('You are limited at 5 tasks per checklist') }}</h3>
                                         <a href="/billing" class="btn btn-primary">{{ __('Unlock all now') }}</a>
                                     </td>
                                 </tr>
-                            @elseif ($loop->iteration <= 5 || Auth::user()->subscribed())
+                            @elseif ($loop->iteration <= 5 || Auth::user()->has_free_access || Auth::user()->subscribed())
                                 <tr>
                                     <td width="5%">
                                         <input type="checkbox" wire:click="complete_task({{ $task->id }})"
