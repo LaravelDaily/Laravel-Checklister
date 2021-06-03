@@ -14,6 +14,7 @@
                                     <th>{{ __('Name') }}</th>
                                     <th>{{ __('Email') }}</th>
                                     <th>{{ __('Website') }}</th>
+                                    <th>{{ __('Payment Plan') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -23,6 +24,7 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->website }}</td>
+                                        <td>{{ $user->subscribed('default') ? 'Paid Plan' : '-' }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
