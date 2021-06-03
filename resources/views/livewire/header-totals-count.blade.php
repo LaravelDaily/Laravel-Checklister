@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="card">
             <div class="card-header">
                 {{ __('Store Review') }}
@@ -9,7 +9,7 @@
                     <div class="col-md-9">
                         <div class="row">
                             @foreach ($checklists as $checklist)
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <strong>{{ $checklist->name }}</strong>
                                 <br />
                                 <strong>{{ $checklist->user_tasks_count }}/{{ $checklist->tasks_count }}</strong>
