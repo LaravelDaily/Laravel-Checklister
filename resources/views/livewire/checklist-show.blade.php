@@ -24,11 +24,32 @@
                                     <td width="90%">
                                         <a wire:click.prevent="toggle_task({{$task->id }})"
                                            href="#">{{ $task->name }}</a>
-                                        @if (!is_null($list_type))
+                                        @if ($user_tasks->where('task_id', $task->id)->first())
                                             <div style="font-style: italic; font-size: 11px">
-                                                {{ $task->checklist->name }}
-                                                @if (optional($user_tasks->where('task_id', $task->id)->first())->due_date)
-                                                    | {{ __('Due') }} {{ $user_tasks->where('task_id', $task->id)->first()->due_date->format('M d, Y') }}
+                                                @if ($list_type)
+                                                    {{ $task->checklist->name }} |
+                                                @endif
+                                                @if ($user_tasks->where('task_id', $task->id)->first()->added_to_my_day_at)
+                                                    <span class="mr-2">
+                                                    &#9788;
+                                                    {{ __('My Day') }}
+                                                </span>
+                                                @endif
+                                                @if ($user_tasks->where('task_id', $task->id)->first()->due_date)
+                                                    <span class="mr-2">
+                                                    &#9745;&nbsp;
+                                                    {{ __('Due') }} {{ $user_tasks->where('task_id', $task->id)->first()->due_date->format('M d, Y') }}
+                                                    </span>
+                                                @endif
+                                                @if ($user_tasks->where('task_id', $task->id)->first()->reminder_at)
+                                                    <span class="mr-2">
+                                                    &#9993;
+                                                    </span>
+                                                @endif
+                                                @if ($user_tasks->where('task_id', $task->id)->first()->note)
+                                                    <span class="mr-2">
+                                                    &#9998;
+                                                    </span>
                                                 @endif
                                             </div>
                                         @endif
