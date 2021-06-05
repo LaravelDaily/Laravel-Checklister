@@ -1,6 +1,6 @@
 <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
     <div class="text-center mt-2">
-        <img src="{{ asset('img/logo.png') }}" width="180" />
+        <img src="{{ asset('img/logo.png') }}" width="180"/>
     </div>
     <ul class="c-sidebar-nav">
         @if (auth()->user()->is_admin)
@@ -85,35 +85,42 @@
             @endforeach
 
             @foreach ($user_menu as $group)
-                <li class="c-sidebar-nav-title">{{ $group['name'] }}
-                    @if ($group['is_new'])
-                        <span class="badge badge-info">NEW</span>
-                    @elseif ($group['is_updated'])
-                        <span class="badge badge-info">UPD</span>
-                    @endif
-                </li>
-                @foreach ($group['checklists'] as $checklist)
-                    <li class="c-sidebar-nav-item">
-                        <a class="c-sidebar-nav-link"
-                           href="{{ route('user.checklists.show', [$checklist['id']]) }}">
-                            <svg class="c-sidebar-nav-icon">
-                                <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-list') }}"></use>
-                            </svg>
-                            {{ $checklist['name'] }}
-                            @livewire('completed-tasks-counter', [
-                            'completed_tasks' => count($checklist['user_completed_tasks']),
-                            'tasks_count' => count($checklist['tasks']),
-                            'checklist_id' => $checklist['id']
-                            ])
+                <li class="mt-2 c-sidebar-nav-item c-sidebar-nav-dropdown c-show">
+                    <a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-folder-open') }}"></use>
+                        </svg> {{ $group['name'] }}
+                        @if ($group['is_new'])
+                            <span class="badge badge-info">NEW</span>
+                        @elseif ($group['is_updated'])
+                            <span class="badge badge-info">UPD</span>
+                        @endif
+                    </a>
+                    <ul class="c-sidebar-nav-dropdown-items">
+                        @foreach ($group['checklists'] as $checklist)
+                            <li class="c-sidebar-nav-item">
+                                <a class="c-sidebar-nav-link"
+                                   href="{{ route('user.checklists.show', [$checklist['id']]) }}">
+                                    <svg class="c-sidebar-nav-icon">
+                                        <use
+                                            xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-list') }}"></use>
+                                    </svg>
+                                    {{ $checklist['name'] }}
+                                    @livewire('completed-tasks-counter', [
+                                    'completed_tasks' => count($checklist['user_completed_tasks']),
+                                    'tasks_count' => count($checklist['tasks']),
+                                    'checklist_id' => $checklist['id']
+                                    ])
 
-                            @if ($checklist['is_new'])
-                                <span class="badge badge-info">NEW</span>
-                            @elseif ($checklist['is_updated'])
-                                <span class="badge badge-info">UPD</span>
-                            @endif
-                        </a>
-                    </li>
-                @endforeach
+                                    @if ($checklist['is_new'])
+                                        <span class="badge badge-info">NEW</span>
+                                    @elseif ($checklist['is_updated'])
+                                        <span class="badge badge-info">UPD</span>
+                                    @endif
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
             @endforeach
         @endif
     </ul>
