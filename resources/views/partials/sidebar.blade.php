@@ -1,4 +1,7 @@
 <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
+    <div class="text-center mt-2">
+        <img src="{{ asset('img/logo.png') }}" width="180" />
+    </div>
     <ul class="c-sidebar-nav">
         @if (auth()->user()->is_admin)
             <li class="c-sidebar-nav-title">{{ __('Manage Checklists') }}</li>
@@ -65,19 +68,20 @@
             </li>
         @else
             @foreach ($user_tasks_menu as $key => $user_task_menu)
-            <li class="c-sidebar-nav-item">
-                <a class="c-sidebar-nav-link"
-                   href="{{ route('user.tasklist', $key) }}">
-                    <svg class="c-sidebar-nav-icon">
-                        <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-' . $user_task_menu['icon']) }}"></use>
-                    </svg>
-                    {{ $user_task_menu['name'] }}
-                    @livewire('user-tasks-counter', [
+                <li class="c-sidebar-nav-item">
+                    <a class="c-sidebar-nav-link"
+                       href="{{ route('user.tasklist', $key) }}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use
+                                xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-' . $user_task_menu['icon']) }}"></use>
+                        </svg>
+                        {{ $user_task_menu['name'] }}
+                        @livewire('user-tasks-counter', [
                         'task_type' => $key,
                         'tasks_count' => $user_task_menu['tasks_count'],
-                    ])
-                </a>
-            </li>
+                        ])
+                    </a>
+                </li>
             @endforeach
 
             @foreach ($user_menu as $group)
@@ -97,9 +101,9 @@
                             </svg>
                             {{ $checklist['name'] }}
                             @livewire('completed-tasks-counter', [
-                                'completed_tasks' => count($checklist['user_completed_tasks']),
-                                'tasks_count' => count($checklist['tasks']),
-                                'checklist_id' => $checklist['id']
+                            'completed_tasks' => count($checklist['user_completed_tasks']),
+                            'tasks_count' => count($checklist['tasks']),
+                            'checklist_id' => $checklist['id']
                             ])
 
                             @if ($checklist['is_new'])
