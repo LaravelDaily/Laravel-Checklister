@@ -10,7 +10,7 @@
                         <div class="row">
                             @foreach ($checklists as $checklist)
                             <div class="col-md-2">
-                                <strong>{{ $checklist->name }}</strong>
+                                <a class="font-weight-bold" href="{{ route('user.checklists.show', $checklist->id) }}">{{ $checklist->name }}</a>
                                 <br />
                                 <strong>{{ $checklist->user_tasks_count }}/{{ $checklist->tasks_count }}</strong>
                                 <div class="progress progress-xs mt-2">
