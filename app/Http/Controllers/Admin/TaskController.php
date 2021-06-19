@@ -37,9 +37,7 @@ class TaskController extends Controller
 
     public function destroy(Checklist $checklist, Task $task): RedirectResponse
     {
-        $checklist->tasks()->where('user_id', NULL)->where('position', '>', $task->position)->update(
-            ['position' => \DB::raw('position - 1')]
-        );
+        $checklist->tasks()->where('user_id', NULL)->where('position', '>', $task->position)->decrement('position', 1);
 
         $task->delete();
 
