@@ -24,8 +24,8 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label for="name">{{ __('Name') }}</label>
-                                        <input value="{{ old('name') }}" class="form-control" name="name" type="text" placeholder="{{ __('Checklist group name') }}">
+                                        <label for="checklist-group-name">{{ __('Name') }}</label>
+                                        <input value="{{ old('name') }}" class="form-control" name="name" type="text" placeholder="{{ __('Checklist group name') }}" id="checklist-group-name" required autofocus>
                                     </div>
                                 </div>
                             </div>

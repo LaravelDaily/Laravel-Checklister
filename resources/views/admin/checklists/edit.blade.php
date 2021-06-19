@@ -27,9 +27,8 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label for="name">{{ __('Name') }}</label>
-                                            <input value="{{ $checklist->name }}" class="form-control" name="name"
-                                                   type="text">
+                                            <label for="checklist-name">{{ __('Name') }}</label>
+                                            <input value="{{ $checklist->name }}" class="form-control" name="name" type="text" id="checklist-name" required>
                                         </div>
                                     </div>
                                 </div>
@@ -78,12 +77,11 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label for="name">{{ __('Name') }}</label>
-                                            <input value="{{ old('name') }}" class="form-control" name="name"
-                                                   type="text">
+                                            <label for="task-name">{{ __('Name') }}</label>
+                                            <input value="{{ old('name') }}" class="form-control" name="name" type="text" id="task-name" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="description">{{ __('Description') }}</label>
+                                            <label for="task-textarea">{{ __('Description') }}</label>
                                             <textarea class="form-control" name="description" rows="5" id="task-textarea">{{ old('description') }}</textarea>
                                         </div>
                                     </div>
