@@ -121,6 +121,7 @@
                             </li>
                         @endforeach
                     </ul>
+                </li>
             @endforeach
         @endif
     </ul>

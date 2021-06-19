@@ -31,12 +31,11 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label for="title">{{ __('Title') }}</label>
-                                            <input value="{{ $page->title }}" class="form-control" name="title"
-                                                   type="text">
+                                            <label for="page-title">{{ __('Title') }}</label>
+                                            <input value="{{ $page->title }}" class="form-control" name="title" type="text" id="page-title" required autofocus>
                                         </div>
                                         <div class="form-group">
-                                            <label for="content">{{ __('Content') }}</label>
+                                            <label for="task-textarea">{{ __('Content') }}</label>
                                             <textarea class="form-control" name="content" rows="5" id="task-textarea">{{ $page->content }}</textarea>
                                         </div>
                                     </div>

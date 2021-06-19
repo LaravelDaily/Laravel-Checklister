@@ -27,12 +27,11 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label for="name">{{ __('Name') }}</label>
-                                            <input value="{{ $task->name }}" class="form-control" name="name"
-                                                   type="text">
+                                            <label for="task-name">{{ __('Name') }}</label>
+                                            <input value="{{ $task->name }}" class="form-control" name="name" type="text" id="task-name" required autofocus>
                                         </div>
                                         <div class="form-group">
-                                            <label for="description">{{ __('Description') }}</label>
+                                            <label for="task-textarea">{{ __('Description') }}</label>
                                             <textarea class="form-control" name="description" rows="5" id="task-textarea">{{ $task->description }}</textarea>
                                         </div>
                                     </div>
